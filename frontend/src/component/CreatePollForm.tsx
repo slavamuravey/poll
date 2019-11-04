@@ -39,7 +39,7 @@ class CreatePollForm extends React.Component<RouteComponentProps, State> {
             return;
         }
 
-        if (this.state.answers.find(answer => (answer as Answer).text.trim() === '')) {
+        if (this.state.answers.find((answer: Answer) => answer.text.trim() === '')) {
             alert('has empty answers');
 
             return;
