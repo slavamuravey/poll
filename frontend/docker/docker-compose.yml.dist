@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  poll-frontend-nginx:
+    build: build/nginx
+    image: poll-frontend/nginx
+    volumes:
+     - "./volumes/nginx/log/:/var/log/nginx/"
+     - "./build/nginx/dev.conf:/etc/nginx/conf.d/default.conf:ro"
+     - "..:/project:ro"
+    ports:
+     - "127.0.0.1:80:80"
+    networks:
+     - poll-frontend
+  poll-frontend-node:
+    build: build/node
+    image: poll-frontend/node
+    volumes:
+     - "..:/project"
+    ports:
+     - "127.0.0.1:3000:3000"
+    networks:
+     - poll-frontend
+
+networks:
+  poll-frontend:
+    driver: bridge

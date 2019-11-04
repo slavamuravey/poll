@@ -1,0 +1,8 @@
+/docker/volumes/*
+/docker/docker-compose.yml
+!/docker/volumes/.gitkeep
+
+# dependencies
+/node_modules
+
+.env

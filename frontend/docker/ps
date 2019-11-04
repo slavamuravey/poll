@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR=$(readlink -e $(dirname $0))
+
+. $(dirname $0)/script/functions.sh
+
+bash -c "cd ${SCRIPT_DIR} && ${SUDO_CMD} docker-compose ps"

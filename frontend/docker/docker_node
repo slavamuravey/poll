@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+. $(dirname $0)/script/functions.sh
+
+if [[ -z "$0" ]]; then
+    echo "What do you wish?"
+fi
+
+node $@
