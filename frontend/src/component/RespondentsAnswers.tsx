@@ -5,7 +5,7 @@ type Props = {
     possibleAnswers: Array<Answer>,
 }
 
-class RespondentsAnswers extends React.Component<Props> {
+class RespondentsAnswers extends React.Component<Props, {}> {
     render() {
         return (
             <div>

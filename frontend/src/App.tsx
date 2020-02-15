@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.scss'
-import {Route, BrowserRouter, Switch, Link} from 'react-router-dom'
-import CreatePollForm from "./CreatePollForm";
-import PollPage from "./PollPage";
-import NoMatch from "./NoMatch";
+import {BrowserRouter, Link, Route, Switch} from 'react-router-dom'
+import PageNotFound from "./page/PageNotFound";
+import PollCreate from "./page/PollCreate";
+import PollOverview from "./page/PollOverview";
 
-class App extends React.Component {
+class App extends React.Component<{}, {}> {
     render() {
         return (
             <div>
@@ -17,11 +17,9 @@ class App extends React.Component {
 
                     <div>
                         <Switch>
-                            <Route exact path="/">
-                                <CreatePollForm />
-                            </Route>
-                            <Route path="/poll/:pollId" component={PollPage} />
-                            <Route component={NoMatch} />
+                            <Route exact path="/" component={PollCreate} />
+                            <Route path="/poll/:pollId" component={PollOverview} />
+                            <Route component={PageNotFound} />
                         </Switch>
                     </div>
                 </BrowserRouter>
