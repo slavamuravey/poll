@@ -1,6 +1,9 @@
 import {RouteComponentProps, withRouter} from "react-router";
 import React from "react";
 import {Formik, FormikValues} from "formik";
+import {Box, Button, IconButton, TextField} from "@material-ui/core";
+import {Alert} from "@material-ui/lab";
+import {Add, Delete} from "@material-ui/icons";
 
 class PollCreateForm extends React.Component<RouteComponentProps, {}> {
     render() {
@@ -8,22 +11,29 @@ class PollCreateForm extends React.Component<RouteComponentProps, {}> {
             <Formik
                 initialValues={{
                     question: '',
-                    answers: [],
+                    answers: [
+                        {
+                            text: ''
+                        },
+                        {
+                            text: ''
+                        }
+                    ],
                 }}
                 validateOnChange={false}
                 validate={(values: FormikValues) => {
                     const errors = [];
 
                     if (values.answers.length === 0) {
-                        errors.push('no answers');
+                        errors.push('No answers');
                     }
 
                     if (values.answers.find((answer: Answer) => answer.text.trim() === '')) {
-                        errors.push('has empty answers');
+                        errors.push('There is empty answer in list');
                     }
 
                     if (values.question.trim() === '') {
-                        errors.push('empty question');
+                        errors.push('Question are required');
                     }
 
                     return errors;
@@ -50,27 +60,24 @@ class PollCreateForm extends React.Component<RouteComponentProps, {}> {
                     <>
                         {
                             !isValid && Array.isArray(errors) ? errors.map((value, index) => (
-                                <div key={index}>
-                                    {value}
-                                </div>
+                                <Alert key={index} severity="error">{value}</Alert>
                             )) : ''
                         }
 
                         <form>
-                            <div>
-                                <span>question</span>
-                                <input value={values.question} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            <Box>
+                                <TextField label="Question" value={values.question} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     setValues({
                                         ...values,
                                         question: e.target.value
                                     });
-                                }} type="text"/>
-                            </div>
-                            <div>
+                                }}/>
+                            </Box>
+
+                            <Box>
                                 {values.answers.map((answer: Answer, index: number) => (
                                     <div key={index}>
-                                        <span>answer</span>
-                                        <input value={answer.text} type="text"
+                                        <TextField label="Answer" value={answer.text}
                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                    let answers: Array<Answer> = values.answers.slice();
                                                    let answer: Answer = answers[index];
@@ -81,22 +88,26 @@ class PollCreateForm extends React.Component<RouteComponentProps, {}> {
                                                        answers: answers
                                                    });
                                                }}/>
-                                        <button onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                                            e.preventDefault();
+                                        <IconButton
+                                            color="secondary"
+                                            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                                e.preventDefault();
 
-                                            let answers = values.answers.slice().filter((answer: Answer, i: number) => index !== i);
+                                                let answers = values.answers.slice().filter((answer: Answer, i: number) => index !== i);
 
-                                            setValues({
-                                                ...values,
-                                                answers: answers
-                                            });
-                                        }}>rm
-                                        </button>
+                                                setValues({
+                                                    ...values,
+                                                    answers: answers
+                                                });
+                                            }}
+                                        >
+                                            <Delete />
+                                        </IconButton>
                                     </div>
                                 ))}
-                            </div>
+                            </Box>
                             <div>
-                                <button onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                <IconButton onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                                     e.preventDefault();
 
                                     setValues({
@@ -105,12 +116,14 @@ class PollCreateForm extends React.Component<RouteComponentProps, {}> {
                                             text: ''
                                         })
                                     });
-                                }}>add
-                                </button>
+                                }}>
+                                    <Add />
+                                </IconButton>
                             </div>
                             <div>
-                                <input onClick={() => !isSubmitting ? submitForm() : false} type="button"
-                                       value="start"/>
+                                <Button variant="contained" color="primary" onClick={() => !isSubmitting ? submitForm() : false}>
+                                    Start
+                                </Button>
                             </div>
                         </form>
                     </>

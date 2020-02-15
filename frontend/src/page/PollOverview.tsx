@@ -2,6 +2,7 @@ import React from "react";
 import {Route, RouteComponentProps} from "react-router";
 import PageNotFound from "./PageNotFound";
 import Poll from "../component/Poll";
+import {LinearProgress} from "@material-ui/core";
 
 type State = {
     possibleAnswers: Array<Answer>,
@@ -67,17 +68,19 @@ class PollOverview extends React.Component<RouteComponentProps<PollId>, State> {
     render() {
         if (this.state.isLoading) {
             return (
-                <div>...loading</div>
+                <LinearProgress />
             );
         }
 
         if (this.state.isPollFound) {
             return (
-                <Poll
-                    question={this.state.question}
-                    possibleAnswers={this.state.possibleAnswers}
-                    pollId={this.props.match.params.pollId}
-                />
+                <>
+                    <Poll
+                        question={this.state.question}
+                        possibleAnswers={this.state.possibleAnswers}
+                        pollId={this.props.match.params.pollId}
+                    />
+                </>
             );
         }
 

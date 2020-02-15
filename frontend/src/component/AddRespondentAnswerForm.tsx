@@ -1,5 +1,6 @@
 import React from 'react'
 import {Formik, FormikValues} from "formik";
+import {Radio, TextField} from "@material-ui/core";
 
 type Props = {
     pollId: string,
@@ -60,8 +61,7 @@ class AddRespondentAnswerForm extends React.Component<Props, {}> {
                                 <span>{this.props.question}</span>
                             </div>
                             <div>
-                                <span>your name: </span>
-                                <input type="text" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                <TextField label="Your name" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     setValues({
                                         ...values,
                                         respondentName: e.target.value
@@ -71,8 +71,8 @@ class AddRespondentAnswerForm extends React.Component<Props, {}> {
                             <div>
                                 {this.props.possibleAnswers.map((value: Answer, index) => (
                                     <span key={index}>
-                                        <input
-                                            type="radio"
+                                        <Radio
+                                            color="primary"
                                             value={index}
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                 setValues({
