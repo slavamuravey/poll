@@ -1,11 +1,12 @@
-const MongoClient = require('mongodb').MongoClient;
-require('dotenv').config();
-const PollRepository = require('./repository/poll');
-const WsServerFactory = require('./api/ws/serverFactory');
-const RestServerFactory = require('./api/rest/serverFactory');
+import MongoClient from 'mongodb';
+import dotenv from 'dotenv';
+dotenv.config();
+import PollRepository from './repository/poll';
+import WsServerFactory from './api/ws/serverFactory';
+import RestServerFactory from './api/rest/serverFactory';
 
 (async () => {
-    let client = await MongoClient.connect(process.env.DSN, {
+    let client = await MongoClient.connect(String(process.env.DSN), {
         useNewUrlParser: true,
         useUnifiedTopology: true
     });

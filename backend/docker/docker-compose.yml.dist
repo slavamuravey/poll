@@ -16,6 +16,7 @@ services:
   poll-backend-node:
     build: build/node
     image: poll-backend/node
+    user: "${USER_ID}:${GROUP_ID}"
     volumes:
      - "..:/project"
     networks:

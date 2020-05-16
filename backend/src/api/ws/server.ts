@@ -1,5 +1,8 @@
-module.exports = class {
-    constructor(io, wsPort) {
+export default class {
+    constructor(
+        private io: any,
+        private readonly wsPort: any
+    ) {
         this.io = io;
         this.wsPort = wsPort;
     }

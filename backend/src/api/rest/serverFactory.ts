@@ -1,11 +1,18 @@
-const finalhandler = require('finalhandler');
+import finalhandler from 'finalhandler';
 const router = require('router')();
-const Server = require('./server');
-const HttpStatus = require('http-status-codes');
-const ObjectID = require('mongodb').ObjectID;
+import Server from './server';
+import HttpStatus from 'http-status-codes';
+import {ObjectId} from 'mongodb';
 
-module.exports = class {
-    constructor(http, pollRepository, httpHost, httpPort, corsOriginSchema, corsOriginHost) {
+export default class {
+    constructor(
+        private http: any,
+        private pollRepository: any,
+        private readonly httpHost: any,
+        private readonly httpPort: any,
+        private readonly corsOriginSchema: any,
+        private readonly corsOriginHost: any
+    ) {
         this.http = http;
         this.pollRepository = pollRepository;
         this.httpHost = httpHost;
@@ -15,9 +22,9 @@ module.exports = class {
     }
 
     createServer() {
-        router.get('/poll/:id', async (req, res) => {
+        router.get('/poll/:id', async (req: any, res: any) => {
             try {
-                let result = await this.pollRepository.findOneByIdProjection(ObjectID(req.params.id), {
+                let result = await this.pollRepository.findOneByIdProjection(new ObjectId(req.params.id), {
                     _id: true,
                     possibleAnswers: true,
                     question: true
@@ -34,15 +41,15 @@ module.exports = class {
                 }));
             }
         });
-        router.post('/poll', (req, res) => {
-            let body = [];
-            req.on('data', function (chunk) {
-                body.push(chunk);
+        router.post('/poll', (req: any, res: any) => {
+            const bodyChunks: any[] = [];
+            req.on('data', function (chunk: any) {
+                bodyChunks.push(chunk);
             });
 
             req.on('end', async () => {
-                body = Buffer.concat(body).toString();
-                body = JSON.parse(body);
+                const bodyString = Buffer.concat(bodyChunks).toString();
+                const body = JSON.parse(bodyString);
 
                 const result = await this.pollRepository.addPoll(body.question, body.possibleAnswers);
 
@@ -55,7 +62,7 @@ module.exports = class {
             });
         });
 
-        return new Server(this.http.createServer((req, res) => {
+        return new Server(this.http.createServer((req: any, res: any) => {
             res.setHeader('Content-Type', 'application/json');
             res.setHeader("Access-Control-Allow-Origin", `${this.corsOriginSchema}://${this.corsOriginHost}`);
             router(req, res, finalhandler(req, res));

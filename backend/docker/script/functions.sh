@@ -5,6 +5,9 @@ SUDO_CMD=$(test -z $(id -Gn | xargs -n1 | grep '^docker$') && echo sudo)
 PROJECT_DIR="/project"
 NPM_HOME=${NPM_HOME:-${DIR}/volumes/npm}
 
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
+
 node() {
     local base_dir=$(dirname ${DIR})
     local work_dir=$(pwd | sed "s:${base_dir}:${PROJECT_DIR}:")
@@ -26,7 +29,7 @@ node() {
         -v ${HOME}/.ssh:/home/node/.ssh \
         -v ${DIR}/..:${PROJECT_DIR} \
         -w ${work_dir} \
-        -u $(id -u) \
+        -u $(id -u):$(id -g) \
         poll-backend/node-cli \
         $@
 }

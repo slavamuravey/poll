@@ -1,5 +1,9 @@
-module.exports = class {
-    constructor(http, httpHost, httpPort) {
+export default class {
+    constructor(
+        private http: any,
+        private readonly httpHost: any,
+        private readonly httpPort: any
+    ) {
         this.http = http;
         this.httpHost = httpHost;
         this.httpPort = httpPort;

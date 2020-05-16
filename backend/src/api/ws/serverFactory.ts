@@ -1,8 +1,14 @@
-const ObjectID = require('mongodb').ObjectID;
-const Server = require('./server');
+import {ObjectId} from 'mongodb';
+import Server from './server';
 
-module.exports = class {
-    constructor(io, pollRepository, corsOriginSchema, corsOriginHost, wsPort) {
+export default class {
+    constructor(
+        private readonly io: any,
+        private pollRepository: any,
+        private readonly corsOriginSchema: any,
+        private readonly corsOriginHost: any,
+        private readonly wsPort: any
+    ) {
         this.io = io;
         this.pollRepository = pollRepository;
         this.corsOriginSchema = corsOriginSchema;
@@ -13,27 +19,27 @@ module.exports = class {
     createServer() {
         const namespace = this.io.of('/poll');
 
-        this.io.origins((origin, callback) => {
+        this.io.origins((origin: any, callback: any) => {
             if (origin !== `${this.corsOriginSchema}://${this.corsOriginHost}`) {
                 return callback('origin not allowed', false);
             }
             callback(null, true);
         });
 
-        namespace.on('connection', socket => {
+        namespace.on('connection', (socket: any) => {
             console.log('New client connected');
 
-            socket.on('message', msg => {
+            socket.on('message', (msg: any) => {
                 socket.emit('message', msg.answer);
                 socket.to(msg.room).emit('message', msg.answer);
 
-                this.pollRepository.addAnswer(ObjectID(msg.room), msg.answer);
+                this.pollRepository.addAnswer(new ObjectId(msg.room), msg.answer);
             });
 
-            socket.on('room', async room => {
+            socket.on('room', async (room: any) => {
                 socket.join(room);
 
-                let answersDocument = await this.pollRepository.findOneById(ObjectID(room));
+                let answersDocument = await this.pollRepository.findOneById(new ObjectId(room));
 
                 if (null === answersDocument) {
                     return;

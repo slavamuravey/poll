@@ -1,9 +1,9 @@
-module.exports = class {
-    constructor(db) {
+export default class {
+    constructor(private db: any) {
         this.db = db;
     }
 
-    addAnswer(id, answer) {
+    addAnswer(id: any, answer: any) {
         this.db.collection('poll').updateOne({
             _id: id
         }, {
@@ -15,13 +15,13 @@ module.exports = class {
         });
     }
 
-    findOneById(id) {
+    findOneById(id: any) {
         return this.db.collection('poll').findOne({
             _id: id
         });
     }
 
-    findOneByIdProjection(id, fields) {
+    findOneByIdProjection(id: any, fields: any) {
         return this.db.collection('poll').findOne({
             _id: id
         }, {
@@ -29,7 +29,7 @@ module.exports = class {
         });
     }
 
-    addPoll(question, possibleAnswers) {
+    addPoll(question: any, possibleAnswers: any) {
         return this.db.collection('poll').insertOne({
             question: question,
             possibleAnswers: possibleAnswers,
